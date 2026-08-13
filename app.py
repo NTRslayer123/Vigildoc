@@ -171,23 +171,23 @@ def render_standalone_graph(graph_data, selected_category=None):
     return html_content
 
 # Sidebar Navigation
-st.sidebar.title("🛡️ VigilDoc Portal")
+st.sidebar.title("VigilDoc Portal")
 st.sidebar.markdown("---")
 
 page = st.sidebar.radio(
     "Navigation Menu",
-    ["🌐 API Topology Map", "📚 Interactive Docs Portal", "🤖 RAG Developer Copilot", "📊 Schema Registry & Metrics"]
+    ["API Topology Map", "Interactive Docs Portal", "RAG Developer Copilot", "Schema Registry & Metrics"]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 🏅 Badge Status")
+st.sidebar.markdown("### Badge Status")
 st.sidebar.markdown("✅ **The Collector** (Ingestion)")
 st.sidebar.markdown("✅ **The Tech Writer** (LLM Docs)")
 st.sidebar.markdown("✅ **The Publisher** (Graph Visualizer)")
 st.sidebar.markdown("✅ **The Assistant** (RAG Copilot)")
 
 # Page 1: API Topology Map
-if page == "🌐 API Topology Map":
+if page == "API Topology Map":
     st.markdown('<div class="main-header">Interactive API Topology & Schema Map</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Visualizing endpoints, schema dependencies, and dense vector similarity linkages</div>', unsafe_allow_html=True)
 
@@ -209,7 +209,7 @@ if page == "🌐 API Topology Map":
         components.html(html_content, height=560, scrolling=False)
 
 # Page 2: Interactive Docs Portal
-elif page == "📚 Interactive Docs Portal":
+elif page == "Interactive Docs Portal":
     st.markdown('<div class="main-header">Live API Reference Documentation</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Multi-language code snippets and vector auto-linked data schemas</div>', unsafe_allow_html=True)
 
@@ -239,7 +239,7 @@ elif page == "📚 Interactive Docs Portal":
         st.info("No synthesized markdown documentation found. Execute build pipeline first.")
 
 # Page 3: RAG Developer Copilot
-elif page == "🤖 RAG Developer Copilot":
+elif page == "RAG Developer Copilot":
     st.markdown('<div class="main-header">RAG Developer Copilot</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Ask complex integration workflow questions and receive copy-pasteable code guides</div>', unsafe_allow_html=True)
 
@@ -248,7 +248,7 @@ elif page == "🤖 RAG Developer Copilot":
         value="How do I authenticate, create a payment intent, and process checkout?"
     )
 
-    if st.button("🚀 Synthesize Integration Guide"):
+    if st.button("Synthesize Integration Guide"):
         with st.spinner("Searching dense vector index and prompting LLM Copilot..."):
             md_files = glob.glob(os.path.join(WIKI_DIR, "**/*.md"), recursive=True)
             if md_files:
@@ -282,7 +282,7 @@ elif page == "🤖 RAG Developer Copilot":
 
                 # Fallback display
                 st.markdown(f"""
-### 📋 Synthesized Workflow Guide
+### Synthesized Workflow Guide
 
 **Query**: *"{user_query}"*
 
@@ -321,7 +321,7 @@ print("Intent Created:", intent.json()["id"])
 """)
 
 # Page 4: Schema Registry & Metrics
-elif page == "📊 Schema Registry & Metrics":
+elif page == "Schema Registry & Metrics":
     st.markdown('<div class="main-header">Schema Registry & Vector Analytics</div>', unsafe_allow_html=True)
     
     meta_file = os.path.join(BASE_DIR, "embeddings_meta.json")
