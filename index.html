@@ -9,10 +9,10 @@
 </head>
 <body>
 
-  <!-- Top Glassmorphic Navigation Bar -->
+  <!-- Floating Linear & Vercel Style Top Navigation Bar -->
   <header class="navbar">
     <div class="brand-title">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         <path d="m9 12 2 2 4-4"/>
       </svg>
@@ -25,13 +25,20 @@
         <path d="m21 21-4.3-4.3"/>
       </svg>
       <input type="text" class="search-bar" id="apiSearchInput" placeholder="Search API endpoints, schemas, or wikilinks...">
+      <span class="hotkey-badge">Ctrl K</span>
     </div>
   </header>
+
+  <!-- Toast Notification Feedback Container -->
+  <div id="toastNotification">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
 
   <!-- Bento Grid Main Dashboard Container -->
   <main class="bento-grid">
 
-    <!-- Bento Hero Card (Span 8): Interactive API Topology Network Map -->
+    <!-- Bento Hero Card (Span 8): Vis.js Topology Map with Pulsing Live Status Indicator -->
     <section class="bento-card bento-col-8">
       <div class="card-header">
         <h2 class="card-title">
@@ -42,9 +49,11 @@
           </svg>
           API Network Topology Map
         </h2>
-        <span class="badge-indigo">Vis-Network Canvas</span>
+        <div style="display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; color: #10B981;">
+          <span class="pulse-dot"></span> LIVE TOPOLOGY
+        </div>
       </div>
-      <div id="topologyNetwork" style="width: 100%; height: 480px; border-radius: 12px; overflow: hidden;"></div>
+      <div id="topologyNetwork" style="width: 100%; height: 480px; border-radius: 14px; overflow: hidden; background: #040813; border: 1px solid var(--border-subtle);"></div>
     </section>
 
     <!-- Bento Metrics Card (Span 4): System Analytics -->
@@ -84,7 +93,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
           Weekly Badge Verification
         </h4>
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-main);">
+        <div style="display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.85rem; color: var(--text-main);">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             <strong>The Collector</strong> (Ingestion Engine)
@@ -105,7 +114,7 @@
       </div>
     </section>
 
-    <!-- Bento API Docs Card (Span 8): Endpoint Reader & Multi-Lang Snippets -->
+    <!-- Bento Reference Reader (Span 8): Code Tabs & Interactive Copy Button -->
     <section class="bento-card bento-col-8">
       <div class="card-header">
         <h2 class="card-title">
@@ -113,23 +122,31 @@
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
           </svg>
-          Endpoint Reference & Multi-Language Snippets
+          Endpoint Reference & Code Snippets
         </h2>
-        <span id="activeEndpointTag" class="badge-indigo">POST /payment_intents</span>
+        <span id="activeEndpointTag" class="method-badge method-post">POST /payment_intents</span>
       </div>
 
       <p id="endpointSummary" style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.95rem;">
         Initializes a new payment intent with customer amount, currency, and payment method options.
       </p>
 
-      <div class="code-tab-bar">
-        <button class="code-tab active" onclick="switchTab('python')">Python</button>
-        <button class="code-tab" onclick="switchTab('curl')">cURL</button>
-        <button class="code-tab" onclick="switchTab('javascript')">JavaScript</button>
-        <button class="code-tab" onclick="switchTab('go')">Go</button>
-      </div>
+      <div class="code-box-container">
+        <div class="code-tab-bar">
+          <div class="tab-group">
+            <button class="code-tab active" onclick="switchTab('python', event)">Python</button>
+            <button class="code-tab" onclick="switchTab('curl', event)">cURL</button>
+            <button class="code-tab" onclick="switchTab('javascript', event)">JavaScript</button>
+            <button class="code-tab" onclick="switchTab('go', event)">Go</button>
+          </div>
 
-      <pre><code id="codeBlock">import requests
+          <button class="btn-copy" onclick="copyCodeSnippet()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Snippet
+          </button>
+        </div>
+
+        <pre><code id="codeBlock">import requests
 
 url = "https://api.paygateway.com/v2/payment_intents"
 headers = {
@@ -144,19 +161,23 @@ payload = {
 
 response = requests.post(url, headers=headers, json=payload)
 print(response.json())</code></pre>
+      </div>
 
       <div style="margin-top: 1.5rem;">
-        <h4 style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">🔗 Vector Auto-Linked Schemas</h4>
+        <h4 style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Vector Auto-Linked Schemas
+        </h4>
         <div id="wikilinksContainer">
-          <a class="wikilink-pill">[[post_customers]]</a>
-          <a class="wikilink-pill">[[post_checkout]]</a>
-          <a class="wikilink-pill">[[post_refunds]]</a>
-          <a class="wikilink-pill">[[post_invoices]]</a>
+          <a class="wikilink-pill" onclick="triggerToast('Copied [[post_customers]] wikilink!')">[[post_customers]]</a>
+          <a class="wikilink-pill" onclick="triggerToast('Copied [[post_checkout]] wikilink!')">[[post_checkout]]</a>
+          <a class="wikilink-pill" onclick="triggerToast('Copied [[post_refunds]] wikilink!')">[[post_refunds]]</a>
+          <a class="wikilink-pill" onclick="triggerToast('Copied [[post_invoices]] wikilink!')">[[post_invoices]]</a>
         </div>
       </div>
     </section>
 
-    <!-- Bento Copilot Card (Span 4): RAG Developer Assistant -->
+    <!-- Bento Copilot Assistant (Span 4): RAG Workflow Assistant -->
     <section class="bento-card bento-col-4">
       <div class="card-header">
         <h2 class="card-title">
@@ -195,6 +216,28 @@ print(response.json())</code></pre>
   </main>
 
   <script>
+    // Keyboard Shortcut (Ctrl+K or Cmd+K) listener for Vercel-style quick search
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        const searchInput = document.getElementById('apiSearchInput');
+        searchInput.focus();
+        searchInput.select();
+        triggerToast('Focused API search bar (Ctrl + K)');
+      }
+    });
+
+    // Toast Notification Manager
+    function triggerToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const msgSpan = document.getElementById('toastMessage');
+      msgSpan.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
     // Load and Render Vis.js Topology Graph
     fetch('graph.json')
       .then(res => res.json())
@@ -246,7 +289,7 @@ print(response.json())</code></pre>
       })
       .catch(err => console.log('Graph load info:', err));
 
-    // Code Snippet Tab Switching
+    // Multi-Language Code Snippet Manager
     const snippets = {
       python: `import requests
 
@@ -304,10 +347,17 @@ func main() {
 }`
     };
 
-    function switchTab(lang) {
+    function switchTab(lang, evt) {
       document.querySelectorAll('.code-tab').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      evt.target.classList.add('active');
       document.getElementById('codeBlock').textContent = snippets[lang];
+    }
+
+    function copyCodeSnippet() {
+      const codeText = document.getElementById('codeBlock').textContent;
+      navigator.clipboard.writeText(codeText).then(() => {
+        triggerToast('Copied code snippet to clipboard!');
+      });
     }
 
     function runCopilotQuery() {

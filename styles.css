@@ -1,38 +1,39 @@
 /* ==========================================================================
-   UI/UX PRO MAX DESIGN SYSTEM - BENTO-GRID & GLASSMORPHISM
+   VIGILDOC PREMIUM DESIGN SYSTEM (LINEAR + STRIPE + VERCEL INSPIRED)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Color Tokens (OLED Midnight Palette) */
-  --bg-deep: #020617;          /* Slate-950 Deep OLED Background */
-  --bg-surface: #0F172A;       /* Slate-900 Card Base Surface */
-  --bg-card-glass: rgba(15, 23, 42, 0.75); /* Glass Canvas */
+  /* Linear Dark OLED Palette */
+  --bg-deep: #080C14;          /* Ultra-deep OLED space background */
+  --bg-surface: #0F172A;       /* Slate-900 surface base */
+  --bg-card-glass: rgba(15, 23, 42, 0.75);
   --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(99, 102, 241, 0.45);
+  --border-glow: rgba(99, 102, 241, 0.5);
 
-  /* Primary Brand Accents */
-  --accent-indigo: #6366F1;     /* Primary Indigo Glow */
-  --accent-cyan: #06B6D4;       /* Neon Cyan Accent */
+  /* Vibrant Neon Accents */
+  --accent-indigo: #6366F1;     /* Primary Indigo */
+  --accent-cyan: #06B6D4;       /* Neon Cyan */
   --accent-emerald: #10B981;    /* Success Emerald */
-  --accent-purple: #8B5CF6;     /* Violet Glow */
+  --accent-purple: #A855F7;     /* Violet Glow */
+  --accent-rose: #F43F5E;       /* Delete / Warning Rose */
+  --accent-amber: #F59E0B;      /* Warning Amber */
 
-  /* Text Contrast Tokens (WCAG AAA Compliant) */
-  --text-main: #F8FAFC;        /* Slate-50 High Contrast Text */
-  --text-muted: #94A3B8;       /* Slate-400 Secondary Text */
-  --text-code: #A5B4FC;        /* Fira Code Highlight */
+  /* Typography Contrast */
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-code: #E2E8F0;
 
-  /* Fine Radiuses */
+  /* Fine Radiuses & Transitions */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-xl: 16px;           /* rounded-xl standard */
-  --radius-2xl: 24px;          /* rounded-2xl bento hero radius */
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
 
-  /* Micro-Transitions */
-  --transition-fast: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --glass-blur: blur(16px) saturate(180%);
+  --glass-blur: blur(20px) saturate(190%);
 }
 
 * {
@@ -44,40 +45,49 @@
 body {
   background-color: var(--bg-deep);
   color: var(--text-main);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+    radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.06) 0%, transparent 60%);
   background-attachment: fixed;
   min-height: 100vh;
-  padding-bottom: 3rem;
+  padding-bottom: 4rem;
 }
 
-/* Header Navigation Bar */
+/* Linear-Style Floating Top Navigation Bar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 2rem;
-  background: rgba(2, 6, 23, 0.8);
+  padding: 1rem 2rem;
+  background: rgba(8, 12, 20, 0.85);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 100;
 }
 
 .brand-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent-indigo) 0%, var(--accent-purple) 50%, var(--accent-cyan) 100%);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 50%, var(--accent-cyan) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
 
+.brand-title svg {
+  color: var(--accent-indigo);
+  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.6));
+}
+
+/* Vercel-Style Search Bar with Hotkey Badge */
 .search-wrapper {
   position: relative;
   display: flex;
@@ -86,7 +96,7 @@ body {
 
 .search-icon {
   position: absolute;
-  left: 1rem;
+  left: 1.1rem;
   color: var(--text-muted);
   width: 18px;
   height: 18px;
@@ -94,21 +104,35 @@ body {
 }
 
 .search-bar {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.8);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 0.6rem 1.2rem 0.6rem 2.8rem;
+  padding: 0.65rem 3.5rem 0.65rem 2.8rem;
   color: var(--text-main);
-  font-size: 0.9rem;
-  width: 380px;
+  font-size: 0.88rem;
+  width: 400px;
   transition: var(--transition-fast);
 }
 
 .search-bar:focus {
   outline: none;
   border-color: var(--accent-indigo);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25), 0 0 20px rgba(99, 102, 241, 0.3);
   background: rgba(15, 23, 42, 0.95);
+}
+
+.hotkey-badge {
+  position: absolute;
+  right: 0.8rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: 'Fira Code', monospace;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  pointer-events: none;
 }
 
 /* Bento Grid System */
@@ -127,21 +151,39 @@ body {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: 1.5rem;
+  padding: 1.6rem;
   transition: var(--transition-smooth);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.45);
   position: relative;
   overflow: hidden;
 }
 
-.bento-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-hover);
-  box-shadow: 0 16px 40px -10px rgba(99, 102, 241, 0.25);
-  cursor: pointer;
+/* Stripe/Linear Spotlight Hover Glow Effect */
+.bento-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: var(--radius-xl);
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 0%, rgba(99, 102, 241, 0.4) 50%, rgba(6, 182, 212, 0.4) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: var(--transition-smooth);
+  pointer-events: none;
 }
 
-/* Bento Column Spans */
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 48px -12px rgba(99, 102, 241, 0.28);
+}
+
+.bento-card:hover::before {
+  opacity: 1;
+}
+
+/* Column Spans */
 .bento-col-4 { grid-column: span 4 / span 4; }
 .bento-col-6 { grid-column: span 6 / span 6; }
 .bento-col-8 { grid-column: span 8 / span 8; }
@@ -153,7 +195,7 @@ body {
   }
 }
 
-/* Card Header & SVG Icons */
+/* Card Header & Badges */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -163,11 +205,12 @@ body {
 
 .card-title {
   font-size: 1.15rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-main);
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  letter-spacing: -0.01em;
 }
 
 .card-title svg {
@@ -176,18 +219,59 @@ body {
   color: var(--accent-indigo);
 }
 
+/* Pulsing Status Dot */
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse-ring 2s infinite;
+  margin-right: 0.4rem;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Stripe-Style Method Badges */
+.method-badge {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.method-post {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818CF8;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.method-get {
+  background: rgba(6, 182, 212, 0.15);
+  color: #22D3EE;
+  border: 1px solid rgba(6, 182, 212, 0.35);
+}
+
 /* Metrics Grid */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 .metric-item {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1.2rem;
+  padding: 1.1rem;
   text-align: center;
   transition: var(--transition-fast);
 }
@@ -195,30 +279,44 @@ body {
 .metric-item:hover {
   background: rgba(99, 102, 241, 0.08);
   border-color: var(--accent-indigo);
+  transform: scale(1.02);
 }
 
 .metric-value {
   font-size: 2.2rem;
-  font-weight: 700;
+  font-weight: 800;
   font-family: 'Fira Code', monospace;
-  color: var(--accent-cyan);
-  margin-bottom: 0.2rem;
+  background: linear-gradient(135deg, #6366F1 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.15rem;
 }
 
 .metric-label {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  font-weight: 600;
 }
 
-/* Code Snippet Viewer */
+/* Code Snippet Viewer & Copy Button */
+.code-box-container {
+  position: relative;
+}
+
 .code-tab-bar {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.6rem;
+}
+
+.tab-group {
+  display: flex;
+  gap: 0.4rem;
 }
 
 .code-tab {
@@ -227,15 +325,37 @@ body {
   color: var(--text-muted);
   padding: 0.4rem 0.85rem;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: var(--transition-fast);
 }
 
 .code-tab.active, .code-tab:hover {
-  background: var(--accent-indigo);
+  background: rgba(99, 102, 241, 0.2);
+  color: #818CF8;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.btn-copy {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-fast);
+}
+
+.btn-copy:hover {
+  background: rgba(99, 102, 241, 0.2);
   color: #FFFFFF;
+  border-color: var(--accent-indigo);
 }
 
 pre code {
@@ -248,17 +368,18 @@ pre code {
   overflow-x: auto;
   color: var(--text-code);
   border: 1px solid var(--border-subtle);
-  line-height: 1.6;
+  line-height: 1.65;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* Wikilink Badges */
+/* Wikilink Pill Badges */
 .wikilink-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(168, 85, 247, 0.12);
   color: #C084FC;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(168, 85, 247, 0.3);
   padding: 0.35rem 0.8rem;
   border-radius: 9999px;
   font-size: 0.82rem;
@@ -269,12 +390,13 @@ pre code {
 }
 
 .wikilink-pill:hover {
-  background: rgba(139, 92, 246, 0.35);
-  transform: translateY(-1px);
+  background: rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
   cursor: pointer;
 }
 
-/* Copilot Interaction */
+/* Copilot Interactive Textarea & Action Button */
 .copilot-input-container {
   display: flex;
   flex-direction: column;
@@ -283,7 +405,7 @@ pre code {
 }
 
 .copilot-textarea {
-  background: rgba(2, 6, 23, 0.8);
+  background: rgba(4, 8, 19, 0.85);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 1rem;
@@ -308,28 +430,46 @@ pre code {
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-md);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
+  letter-spacing: -0.01em;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
 }
 
 .btn-primary:hover {
-  opacity: 0.92;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+  opacity: 0.95;
 }
 
-.badge-indigo {
-  background: rgba(99, 102, 241, 0.15);
-  color: #818CF8;
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  padding: 0.3rem 0.8rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
+/* Toast Notification */
+#toastNotification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(16, 185, 129, 0.9);
+  color: #FFFFFF;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
   font-weight: 600;
-  font-family: 'Fira Code', monospace;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+  backdrop-filter: blur(10px);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+#toastNotification.show {
+  transform: translateY(0);
+  opacity: 1;
 }
