@@ -129,14 +129,30 @@ def render_standalone_graph(graph_data, selected_category=None):
                 nodes: {{
                     borderWidth: 2,
                     shadow: true,
-                    font: {{ color: '#F8FAFC', size: 14 }}
+                    font: {{ color: '#F8FAFC', size: 14 }},
+                    margin: 10
                 }},
                 edges: {{
                     smooth: {{ type: 'continuous' }},
                     shadow: true
                 }},
                 physics: {{
-                    enabled: false
+                    enabled: true,
+                    solver: 'barnesHut',
+                    barnesHut: {{
+                        gravitationalConstant: -6000,
+                        centralGravity: 0.2,
+                        springLength: 150,
+                        springConstant: 0.05,
+                        damping: 0.09,
+                        avoidOverlap: 1.0
+                    }},
+                    stabilization: {{
+                        enabled: true,
+                        iterations: 600,
+                        updateInterval: 25,
+                        fit: true
+                    }}
                 }},
                 interaction: {{
                     dragNodes: true,
@@ -145,6 +161,9 @@ def render_standalone_graph(graph_data, selected_category=None):
                 }}
             }};
             var network = new vis.Network(container, data, options);
+            network.once("stabilizationIterationsDone", function() {{
+                network.setOptions({{ physics: false }});
+            }});
         </script>
     </body>
     </html>
