@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VigilDoc — Live Technical & API Documentation Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+
+  <!-- Top Glassmorphic Navigation Bar -->
+  <header class="navbar">
+    <div class="brand-title">
+      <span>🛡️</span> VigilDoc Developer Portal
+    </div>
+    <input type="text" class="search-bar" id="apiSearchInput" placeholder="🔍 Search API endpoints, models, or wikilinks...">
+  </header>
+
+  <!-- Bento Grid Main Container -->
+  <main class="bento-grid">
+
+    <!-- Bento Hero Card (Span 8): Interactive API Topology Map -->
+    <section class="bento-card bento-col-8">
+      <div class="card-header">
+        <h2 class="card-title"><span>🌐</span> Interactive API Network Topology Map</h2>
+        <span class="badge-indigo">Live Vis-Network Canvas</span>
+      </div>
+      <div id="topologyNetwork" style="width: 100%; height: 480px; border-radius: 12px; overflow: hidden;"></div>
+    </section>
+
+    <!-- Bento Metrics Card (Span 4): Real-Time API Stats -->
+    <section class="bento-card bento-col-4">
+      <div class="card-header">
+        <h2 class="card-title"><span>📊</span> System Analytics</h2>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-item">
+          <div class="metric-value">32</div>
+          <div class="metric-label">Captured Endpoints</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">42</div>
+          <div class="metric-label">Graph Nodes</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">103</div>
+          <div class="metric-label">Schema Links</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">4</div>
+          <div class="metric-label">API Domains</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">🏅 Weekly Badge Completion</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+          <div>✅ <strong>The Collector</strong> (Ingestion Engine)</div>
+          <div>✅ <strong>The Tech Writer</strong> (LLM Docs & Snippets)</div>
+          <div>✅ <strong>The Publisher</strong> (Bento Topology Map)</div>
+          <div>✅ <strong>The Assistant</strong> (RAG Copilot)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento API Docs Card (Span 8): Dynamic Documentation & Code Viewer -->
+    <section class="bento-card bento-col-8">
+      <div class="card-header">
+        <h2 class="card-title"><span>📚</span> Endpoint Reference & Code Examples</h2>
+        <span id="activeEndpointTag" class="badge-indigo">POST /payment_intents</span>
+      </div>
+
+      <p id="endpointSummary" style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.95rem;">
+        Initializes a new payment intent with customer amount, currency, and payment method options.
+      </p>
+
+      <div class="code-tab-bar">
+        <button class="code-tab active" onclick="switchTab('python')">Python</button>
+        <button class="code-tab" onclick="switchTab('curl')">cURL</button>
+        <button class="code-tab" onclick="switchTab('javascript')">JavaScript</button>
+        <button class="code-tab" onclick="switchTab('go')">Go</button>
+      </div>
+
+      <pre><code id="codeBlock">import requests
+
+url = "https://api.paygateway.com/v2/payment_intents"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+payload = {
+    "amount": 2500,
+    "currency": "usd",
+    "customer_id": "cus_88921a"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())</code></pre>
+
+      <div style="margin-top: 1.5rem;">
+        <h4 style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">🔗 Vector Auto-Linked Schemas</h4>
+        <div id="wikilinksContainer">
+          <a href="#" class="wikilink-pill">[[post_customers]]</a>
+          <a href="#" class="wikilink-pill">[[post_checkout]]</a>
+          <a href="#" class="wikilink-pill">[[post_refunds]]</a>
+          <a href="#" class="wikilink-pill">[[post_invoices]]</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Copilot Card (Span 4): RAG Developer Assistant -->
+    <section class="bento-card bento-col-4">
+      <div class="card-header">
+        <h2 class="card-title"><span>🤖</span> RAG Copilot Assistant</h2>
+      </div>
+
+      <p style="color: var(--text-muted); font-size: 0.88rem;">
+        Ask multi-step integration questions to generate executable code workflows:
+      </p>
+
+      <div class="copilot-input-container">
+        <textarea class="copilot-textarea" id="copilotQuery" placeholder="e.g. How do I authenticate, create a customer, and initiate checkout?"></textarea>
+        <button class="btn-primary" onclick="runCopilotQuery()">
+          <span>🚀</span> Synthesize Guide
+        </button>
+      </div>
+
+      <div id="copilotResult" style="margin-top: 1.25rem; font-size: 0.88rem; color: #D1D5DB; display: none;">
+        <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">📋 Workflow Result</h4>
+        <div id="copilotResultBody" style="background: rgba(0,0,0,0.3); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-subtle);"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Load and Render Vis.js Topology Graph
+    fetch('graph.json')
+      .then(res => res.json())
+      .then(graphData => {
+        var container = document.getElementById('topologyNetwork');
+        var data = {
+          nodes: new vis.DataSet(graphData.nodes),
+          edges: new vis.DataSet(graphData.edges)
+        };
+        var options = {
+          nodes: {
+            borderWidth: 2,
+            shadow: true,
+            font: { color: '#F8FAFC', size: 14 },
+            margin: 10
+          },
+          edges: {
+            smooth: { type: 'continuous' },
+            shadow: true
+          },
+          physics: {
+            enabled: true,
+            solver: 'barnesHut',
+            barnesHut: {
+              gravitationalConstant: -6000,
+              centralGravity: 0.2,
+              springLength: 150,
+              springConstant: 0.05,
+              damping: 0.09,
+              avoidOverlap: 1.0
+            },
+            stabilization: {
+              enabled: true,
+              iterations: 600,
+              updateInterval: 25,
+              fit: true
+            }
+          },
+          interaction: {
+            dragNodes: true,
+            zoomView: true,
+            hover: true
+          }
+        };
+        var network = new vis.Network(container, data, options);
+        network.once("stabilizationIterationsDone", function() {
+          network.setOptions({ physics: false });
+        });
+      })
+      .catch(err => console.log('Graph load info:', err));
+
+    // Code Snippet Tab Switching
+    const snippets = {
+      python: `import requests
+
+url = "https://api.paygateway.com/v2/payment_intents"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+payload = {
+    "amount": 2500,
+    "currency": "usd",
+    "customer_id": "cus_88921a"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())`,
+      curl: `curl -X POST "https://api.paygateway.com/v2/payment_intents" \\
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{"amount": 2500, "currency": "usd", "customer_id": "cus_88921a"}'`,
+      javascript: `const fetch = require('node-fetch');
+
+async function createPaymentIntent() {
+  const res = await fetch('https://api.paygateway.com/v2/payment_intents', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ amount: 2500, currency: 'usd', customer_id: 'cus_88921a' })
+  });
+  const data = await res.json();
+  console.log(data);
+}
+createPaymentIntent();`,
+      go: `package main
+
+import (
+	"fmt"
+	"strings"
+	"net/http"
+	"io/ioutil"
+)
+
+func main() {
+	url := "https://api.paygateway.com/v2/payment_intents"
+	payload := strings.NewReader(\`{"amount": 2500, "currency": "usd"}\`)
+	req, _ := http.NewRequest("POST", url, payload)
+	req.Header.Add("Authorization", "Bearer YOUR_ACCESS_TOKEN")
+	req.Header.Add("Content-Type", "application/json")
+	res, _ := http.DefaultClient.Do(req)
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+	fmt.Println(string(body))
+}`
+    };
+
+    function switchTab(lang) {
+      document.querySelectorAll('.code-tab').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('codeBlock').textContent = snippets[lang];
+    }
+
+    function runCopilotQuery() {
+      const q = document.getElementById('copilotQuery').value;
+      const resContainer = document.getElementById('copilotResult');
+      const resBody = document.getElementById('copilotResultBody');
+      resContainer.style.display = 'block';
+      resBody.innerHTML = `
+        <p><strong>Query</strong>: "${q}"</p>
+        <p style="margin-top: 0.5rem; color: #818CF8;">1. Authenticate via <code>[[post_auth_token]]</code></p>
+        <p style="color: #818CF8;">2. Create Payment Intent via <code>[[post_payment_intents]]</code></p>
+        <p style="color: #818CF8;">3. Execute Checkout via <code>[[post_checkout]]</code></p>
+      `;
+    }
+  </script>
+</body>
+</html>
