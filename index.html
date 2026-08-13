@@ -12,32 +12,58 @@
   <!-- Top Glassmorphic Navigation Bar -->
   <header class="navbar">
     <div class="brand-title">
-      <span>🛡️</span> VigilDoc Developer Portal
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+      VigilDoc Developer Portal
     </div>
-    <input type="text" class="search-bar" id="apiSearchInput" placeholder="🔍 Search API endpoints, models, or wikilinks...">
+
+    <div class="search-wrapper">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+      <input type="text" class="search-bar" id="apiSearchInput" placeholder="Search API endpoints, schemas, or wikilinks...">
+    </div>
   </header>
 
-  <!-- Bento Grid Main Container -->
+  <!-- Bento Grid Main Dashboard Container -->
   <main class="bento-grid">
 
-    <!-- Bento Hero Card (Span 8): Interactive API Topology Map -->
+    <!-- Bento Hero Card (Span 8): Interactive API Topology Network Map -->
     <section class="bento-card bento-col-8">
       <div class="card-header">
-        <h2 class="card-title"><span>🌐</span> Interactive API Network Topology Map</h2>
-        <span class="badge-indigo">Live Vis-Network Canvas</span>
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+          API Network Topology Map
+        </h2>
+        <span class="badge-indigo">Vis-Network Canvas</span>
       </div>
       <div id="topologyNetwork" style="width: 100%; height: 480px; border-radius: 12px; overflow: hidden;"></div>
     </section>
 
-    <!-- Bento Metrics Card (Span 4): Real-Time API Stats -->
+    <!-- Bento Metrics Card (Span 4): System Analytics -->
     <section class="bento-card bento-col-4">
       <div class="card-header">
-        <h2 class="card-title"><span>📊</span> System Analytics</h2>
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          System Analytics
+        </h2>
       </div>
+
       <div class="metrics-grid">
         <div class="metric-item">
           <div class="metric-value">32</div>
-          <div class="metric-label">Captured Endpoints</div>
+          <div class="metric-label">Endpoints</div>
         </div>
         <div class="metric-item">
           <div class="metric-value">42</div>
@@ -49,25 +75,43 @@
         </div>
         <div class="metric-item">
           <div class="metric-value">4</div>
-          <div class="metric-label">API Domains</div>
+          <div class="metric-label">Domains</div>
         </div>
       </div>
 
       <div style="margin-top: 1.5rem;">
-        <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">🏅 Weekly Badge Completion</h4>
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
-          <div>✅ <strong>The Collector</strong> (Ingestion Engine)</div>
-          <div>✅ <strong>The Tech Writer</strong> (LLM Docs & Snippets)</div>
-          <div>✅ <strong>The Publisher</strong> (Bento Topology Map)</div>
-          <div>✅ <strong>The Assistant</strong> (RAG Copilot)</div>
+        <h4 style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">🏅 Weekly Badge Verification</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-main);">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>The Collector</strong> (Ingestion Engine)
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>The Tech Writer</strong> (LLM Docs & Snippets)
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>The Publisher</strong> (Bento Topology Map)
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <strong>The Assistant</strong> (RAG Copilot)
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Bento API Docs Card (Span 8): Dynamic Documentation & Code Viewer -->
+    <!-- Bento API Docs Card (Span 8): Endpoint Reader & Multi-Lang Snippets -->
     <section class="bento-card bento-col-8">
       <div class="card-header">
-        <h2 class="card-title"><span>📚</span> Endpoint Reference & Code Examples</h2>
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          Endpoint Reference & Multi-Language Snippets
+        </h2>
         <span id="activeEndpointTag" class="badge-indigo">POST /payment_intents</span>
       </div>
 
@@ -101,10 +145,10 @@ print(response.json())</code></pre>
       <div style="margin-top: 1.5rem;">
         <h4 style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">🔗 Vector Auto-Linked Schemas</h4>
         <div id="wikilinksContainer">
-          <a href="#" class="wikilink-pill">[[post_customers]]</a>
-          <a href="#" class="wikilink-pill">[[post_checkout]]</a>
-          <a href="#" class="wikilink-pill">[[post_refunds]]</a>
-          <a href="#" class="wikilink-pill">[[post_invoices]]</a>
+          <a class="wikilink-pill">[[post_customers]]</a>
+          <a class="wikilink-pill">[[post_checkout]]</a>
+          <a class="wikilink-pill">[[post_refunds]]</a>
+          <a class="wikilink-pill">[[post_invoices]]</a>
         </div>
       </div>
     </section>
@@ -112,23 +156,36 @@ print(response.json())</code></pre>
     <!-- Bento Copilot Card (Span 4): RAG Developer Assistant -->
     <section class="bento-card bento-col-4">
       <div class="card-header">
-        <h2 class="card-title"><span>🤖</span> RAG Copilot Assistant</h2>
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="10" rx="2"/>
+            <circle cx="12" cy="5" r="2"/>
+            <path d="M12 7v4"/>
+            <line x1="8" y1="16" x2="8" y2="16"/>
+            <line x1="16" y1="16" x2="16" y2="16"/>
+          </svg>
+          RAG Copilot Assistant
+        </h2>
       </div>
 
       <p style="color: var(--text-muted); font-size: 0.88rem;">
-        Ask multi-step integration questions to generate executable code workflows:
+        Ask multi-step integration scenarios to generate copy-pasteable workflow code:
       </p>
 
       <div class="copilot-input-container">
         <textarea class="copilot-textarea" id="copilotQuery" placeholder="e.g. How do I authenticate, create a customer, and initiate checkout?"></textarea>
         <button class="btn-primary" onclick="runCopilotQuery()">
-          <span>🚀</span> Synthesize Guide
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Synthesize Guide
         </button>
       </div>
 
       <div id="copilotResult" style="margin-top: 1.25rem; font-size: 0.88rem; color: #D1D5DB; display: none;">
-        <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">📋 Workflow Result</h4>
-        <div id="copilotResultBody" style="background: rgba(0,0,0,0.3); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-subtle);"></div>
+        <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Workflow Result
+        </h4>
+        <div id="copilotResultBody" style="background: #040813; padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-subtle); font-family: 'Fira Code', monospace; font-size: 0.82rem;"></div>
       </div>
     </section>
 
