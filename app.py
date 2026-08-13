@@ -136,11 +136,12 @@ def render_standalone_graph(graph_data, selected_category=None):
                     shadow: true
                 }},
                 physics: {{
-                    stabilization: false,
-                    barnesHut: {{
-                        gravitationalConstant: -3000,
-                        springLength: 95
-                    }}
+                    enabled: false
+                }},
+                interaction: {{
+                    dragNodes: true,
+                    zoomView: true,
+                    hover: true
                 }}
             }};
             var network = new vis.Network(container, data, options);
