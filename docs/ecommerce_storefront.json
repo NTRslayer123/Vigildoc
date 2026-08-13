@@ -1,0 +1,330 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "E-Commerce Storefront & Catalog API",
+    "description": "API suite for managing product catalog, inventory levels, shopping carts, checkout orders, and customer reviews.",
+    "version": "1.8.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.mystore.com/v1",
+      "description": "Main Storefront Gateway"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "List Catalog Products",
+        "description": "Returns paginated list of available storefront products filtered by category, price, or search query.",
+        "tags": ["Core Endpoints"],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 20 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": { "type": "string" },
+                          "title": { "type": "string" },
+                          "price": { "type": "number" },
+                          "sku": { "type": "string" },
+                          "inventory_count": { "type": "integer" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Product Listing",
+        "description": "Adds a new merchandise item to the storefront catalog.",
+        "tags": ["Core Endpoints"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "price", "sku"],
+                "properties": {
+                  "title": { "type": "string", "example": "Wireless Noise-Canceling Headphones" },
+                  "price": { "type": "number", "example": 199.99 },
+                  "sku": { "type": "string", "example": "AUD-HD-001" },
+                  "category": { "type": "string", "example": "Electronics" },
+                  "description": { "type": "string", "example": "Premium over-ear headphones" }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Product created successfully"
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Get Product Details",
+        "description": "Retrieves comprehensive information, specifications, and media assets for a single product.",
+        "tags": ["Core Endpoints"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product_id": { "type": "string" },
+                    "title": { "type": "string" },
+                    "price": { "type": "number" },
+                    "specs": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "List Taxonomy Categories",
+        "description": "Fetches hierarchical category tree for organizing products.",
+        "tags": ["Core Endpoints"],
+        "responses": {
+          "200": {
+            "description": "Category tree structure"
+          }
+        }
+      }
+    },
+    "/cart": {
+      "post": {
+        "summary": "Create Shopping Cart",
+        "description": "Initializes an active cart session for an authenticated user or guest buyer.",
+        "tags": ["Core Endpoints"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": { "type": "string", "example": "cus_991823" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cart initialized"
+          }
+        }
+      }
+    },
+    "/cart/items": {
+      "post": {
+        "summary": "Add Item to Cart",
+        "description": "Appends product SKU and desired quantity into the user's active shopping cart.",
+        "tags": ["Core Endpoints"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["cart_id", "product_id", "quantity"],
+                "properties": {
+                  "cart_id": { "type": "string", "example": "cart_88192a" },
+                  "product_id": { "type": "string", "example": "prod_1002" },
+                  "quantity": { "type": "integer", "example": 2 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item added to cart"
+          }
+        }
+      }
+    },
+    "/cart/{id}": {
+      "get": {
+        "summary": "Retrieve Cart Contents",
+        "description": "Returns full line-item breakdown, quantities, subtotal, and estimated taxes for a cart ID.",
+        "tags": ["Core Endpoints"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart contents"
+          }
+        }
+      }
+    },
+    "/checkout": {
+      "post": {
+        "summary": "Initiate Checkout Session",
+        "description": "Converts cart items into a pending order and generates payment gateway intent.",
+        "tags": ["Core Endpoints"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["cart_id", "shipping_address"],
+                "properties": {
+                  "cart_id": { "type": "string", "example": "cart_88192a" },
+                  "customer_id": { "type": "string", "example": "cus_991823" },
+                  "shipping_address": {
+                    "type": "object",
+                    "properties": {
+                      "street": { "type": "string" },
+                      "city": { "type": "string" },
+                      "postal_code": { "type": "string" },
+                      "country": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Checkout initiated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "order_id": { "type": "string", "example": "ord_99201" },
+                    "payment_intent_id": { "type": "string", "example": "pi_3MtwBwLkdIWv" },
+                    "total_amount": { "type": "number", "example": 399.98 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "summary": "List Customer Orders",
+        "description": "Retrieves order history for an authenticated customer.",
+        "tags": ["Core Endpoints"],
+        "responses": {
+          "200": {
+            "description": "Order history"
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "summary": "Get Order Status",
+        "description": "Fetches order tracking status, fulfillment state, and delivery courier details.",
+        "tags": ["Core Endpoints"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order status"
+          }
+        }
+      }
+    },
+    "/inventory/reserve": {
+      "post": {
+        "summary": "Reserve Inventory Items",
+        "description": "Internal warehouse endpoint to reserve stock units prior to order dispatch.",
+        "tags": ["Core Endpoints"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["product_id", "quantity"],
+                "properties": {
+                  "product_id": { "type": "string" },
+                  "quantity": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Stock reserved"
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "post": {
+        "summary": "Submit Product Review",
+        "description": "Submits customer star rating and feedback comment for a verified purchase item.",
+        "tags": ["Core Endpoints"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["product_id", "rating", "comment"],
+                "properties": {
+                  "product_id": { "type": "string" },
+                  "rating": { "type": "integer", "example": 5 },
+                  "comment": { "type": "string", "example": "Outstanding sound quality and comfort!" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review posted"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# Environment & Virtual Environments
+.env
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+
+# Agent Rules
+.agents/
+
+# Generated embeddings & vector indices
+embeddings.npy
+embeddings_meta.json
+graph.json
+raw/
+wiki/
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/

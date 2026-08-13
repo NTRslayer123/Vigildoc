@@ -1,0 +1,435 @@
+openapi: 3.0.3
+info:
+  title: Payment Gateway & Billing API
+  description: Robust API suite for processing online payments, managing subscriptions, customer billing accounts, and handling webhook notifications.
+  version: 2.4.0
+servers:
+  - url: https://api.paygateway.com/v2
+    description: Production Server
+paths:
+  /auth/token:
+    post:
+      summary: Generate OAuth2 Access Token
+      description: Issues a short-lived bearer token for authenticating merchant API requests.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - client_id
+                - client_secret
+                - grant_type
+              properties:
+                client_id:
+                  type: string
+                  example: "client_live_891f7a"
+                client_secret:
+                  type: string
+                  example: "sec_live_9941a82"
+                grant_type:
+                  type: string
+                  example: "client_credentials"
+      responses:
+        '200':
+          description: Token successfully generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: integer
+  /payment_intents:
+    post:
+      summary: Create Payment Intent
+      description: Initializes a new payment intent with customer amount, currency, and payment method options.
+      tags:
+        - Core Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - currency
+              properties:
+                amount:
+                  type: integer
+                  description: Amount in smallest currency unit (e.g. cents)
+                  example: 2500
+                currency:
+                  type: string
+                  example: "usd"
+                customer_id:
+                  type: string
+                  example: "cus_88921a"
+                description:
+                  type: string
+                  example: "Order #1049 Payment"
+      responses:
+        '201':
+          description: Payment Intent Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "pi_3MtwBwLkdIWv"
+                  status:
+                    type: string
+                    example: "requires_payment_method"
+                  amount:
+                    type: integer
+                  currency:
+                    type: string
+                  client_secret:
+                    type: string
+  /payment_intents/{id}/confirm:
+    post:
+      summary: Confirm Payment Intent
+      description: Confirms and authorizes a payment intent using a attached payment method.
+      tags:
+        - Core Endpoints
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - payment_method_id
+              properties:
+                payment_method_id:
+                  type: string
+                  example: "pm_card_visa"
+                return_url:
+                  type: string
+                  example: "https://shop.example.com/checkout/complete"
+      responses:
+        '200':
+          description: Payment Confirmed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    example: "succeeded"
+                  charge_id:
+                    type: string
+                    example: "ch_1N912a"
+  /payment_intents/{id}:
+    get:
+      summary: Retrieve Payment Intent
+      description: Retrieves the current details and processing state of a payment intent by ID.
+      tags:
+        - Core Endpoints
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment Intent details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  amount:
+                    type: integer
+                  status:
+                    type: string
+  /customers:
+    post:
+      summary: Create Customer Profile
+      description: Creates a reusable customer billing profile to store payment methods and invoice history.
+      tags:
+        - Core Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  example: "customer@example.com"
+                name:
+                  type: string
+                  example: "Jane Doe"
+                phone:
+                  type: string
+                  example: "+15550192834"
+      responses:
+        '201':
+          description: Customer Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customer_id:
+                    type: string
+                    example: "cus_991823"
+                  email:
+                    type: string
+                  created_at:
+                    type: integer
+  /customers/{id}:
+    get:
+      summary: Retrieve Customer Profile
+      description: Fetches full billing details and payment methods associated with a customer ID.
+      tags:
+        - Core Endpoints
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customer_id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+  /refunds:
+    post:
+      summary: Issue Refund
+      description: Processes full or partial refund for a successful charge or payment intent.
+      tags:
+        - Core Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - charge_id
+              properties:
+                charge_id:
+                  type: string
+                  example: "ch_1N912a"
+                amount:
+                  type: integer
+                  description: Optional amount for partial refund in cents
+                  example: 1000
+                reason:
+                  type: string
+                  example: "requested_by_customer"
+      responses:
+        '200':
+          description: Refund Processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refund_id:
+                    type: string
+                    example: "re_3MtwBw"
+                  status:
+                    type: string
+                    example: "succeeded"
+                  amount:
+                    type: integer
+  /invoices:
+    post:
+      summary: Create Draft Invoice
+      description: Creates a draft line-item invoice for a customer billing account.
+      tags:
+        - Core Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customer_id
+                - amount
+              properties:
+                customer_id:
+                  type: string
+                  example: "cus_991823"
+                amount:
+                  type: integer
+                  example: 4999
+                currency:
+                  type: string
+                  example: "usd"
+                description:
+                  type: string
+                  example: "Monthly Subscription - Enterprise Tier"
+      responses:
+        '201':
+          description: Invoice Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invoice_id:
+                    type: string
+                    example: "in_19082a"
+                  status:
+                    type: string
+                    example: "draft"
+                  due_date:
+                    type: integer
+  /invoices/{id}/pay:
+    post:
+      summary: Pay Invoice
+      description: Triggers immediate payment collection for an open customer invoice.
+      tags:
+        - Core Endpoints
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Invoice Paid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invoice_id:
+                    type: string
+                  status:
+                    type: string
+                    example: "paid"
+                  paid_at:
+                    type: integer
+  /webhooks/listeners:
+    post:
+      summary: Register Webhook Endpoint
+      description: Registers an HTTP endpoint to receive real-time JSON events for payment status changes.
+      tags:
+        - Webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+                - enabled_events
+              properties:
+                url:
+                  type: string
+                  example: "https://api.mycompany.com/webhooks/paygateway"
+                enabled_events:
+                  type: array
+                  items:
+                    type: string
+                  example: ["payment_intent.succeeded", "charge.refunded", "invoice.payment_failed"]
+      responses:
+        '201':
+          description: Webhook Endpoint Registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  webhook_id:
+                    type: string
+                    example: "we_1092a"
+                  secret:
+                    type: string
+                    example: "whsec_99182a"
+  /webhooks/events:
+    get:
+      summary: List Webhook Delivery Logs
+      description: Fetches historical audit log of webhook events dispatched to merchant endpoints.
+      tags:
+        - Webhooks
+      responses:
+        '200':
+          description: List of dispatched webhook events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        event_id:
+                          type: string
+                        type:
+                          type: string
+                        status_code:
+                          type: integer
+  /schemas/payment_method:
+    get:
+      summary: Get Payment Method Schema
+      description: Returns structural schema definition for payment credit cards, ACH, and digital wallets.
+      tags:
+        - Data Schemas
+      responses:
+        '200':
+          description: Schema definition
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: "card"
+                  card:
+                    type: object
+                    properties:
+                      brand:
+                        type: string
+                      last4:
+                        type: string
+                      exp_month:
+                        type: integer
+                      exp_year:
+                        type: integer
