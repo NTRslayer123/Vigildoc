@@ -15,6 +15,12 @@ embeddings_meta.json
 graph.json
 raw/
 wiki/
+topology_graph.html
+
+# Generated PyVis assets
+lib/bindings/
+lib/tom-select/
+lib/vis-9.1.2/
 
 # OS & IDE
 .DS_Store

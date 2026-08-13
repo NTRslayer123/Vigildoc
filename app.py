@@ -8,7 +8,6 @@ import json
 import glob
 import streamlit as st
 import streamlit.components.v1 as components
-from pyvis.network import Network
 from lib.vector_utils import compute_embeddings, find_top_k_similar
 from lib.llm_utils import get_groq_api_key
 import requests
@@ -77,42 +76,79 @@ def load_graph():
             return json.load(f)
     return None
 
-def render_pyvis_graph(graph_data, selected_category=None):
-    net = Network(height="550px", width="100%", bgcolor="#0F172A", font_color="#F8FAFC")
-    net.force_atlas_2based()
-
+def render_standalone_graph(graph_data, selected_category=None):
+    """Renders standalone Vis.js force-directed topology network directly in browser iframe."""
     nodes = graph_data.get('nodes', [])
     edges = graph_data.get('edges', [])
+
+    filtered_nodes = []
+    node_ids = set()
 
     for node in nodes:
         if selected_category and selected_category != "All":
             if node.get('group') == 'endpoint' and node.get('category') != selected_category:
                 continue
+        filtered_nodes.append(node)
+        node_ids.add(node['id'])
 
-        net.add_node(
-            node['id'],
-            label=node['label'],
-            title=f"Category: {node.get('category', node.get('group'))}",
-            color=node.get('color', '#3498DB'),
-            shape=node.get('shape', 'box'),
-            size=node.get('size', 15)
-        )
-
+    filtered_edges = []
     for edge in edges:
-        # verify both nodes exist
-        existing_nodes = set([n['id'] for n in net.nodes])
-        if edge['from'] in existing_nodes and edge['to'] in existing_nodes:
-            net.add_edge(
-                edge['from'],
-                edge['to'],
-                title=edge.get('label', ''),
-                color=edge.get('color', '#BDC3C7'),
-                dashes=edge.get('dashes', False)
-            )
+        if edge['from'] in node_ids and edge['to'] in node_ids:
+            filtered_edges.append(edge)
 
-    html_path = os.path.join(BASE_DIR, "topology_graph.html")
-    net.save_graph(html_path)
-    return html_path
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+        <style type="text/css">
+            html, body {{
+                margin: 0;
+                padding: 0;
+                background-color: #0F172A;
+                font-family: system-ui, -apple-system, sans-serif;
+            }}
+            #mynetwork {{
+                width: 100%;
+                height: 540px;
+                background-color: #0F172A;
+                border: 1px solid rgba(99, 102, 241, 0.3);
+                border-radius: 12px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div id="mynetwork"></div>
+        <script type="text/javascript">
+            var nodes = new vis.DataSet({json.dumps(filtered_nodes)});
+            var edges = new vis.DataSet({json.dumps(filtered_edges)});
+            var container = document.getElementById('mynetwork');
+            var data = {{ nodes: nodes, edges: edges }};
+            var options = {{
+                nodes: {{
+                    borderWidth: 2,
+                    shadow: true,
+                    font: {{ color: '#F8FAFC', size: 14 }}
+                }},
+                edges: {{
+                    smooth: {{ type: 'continuous' }},
+                    shadow: true
+                }},
+                physics: {{
+                    stabilization: false,
+                    barnesHut: {{
+                        gravitationalConstant: -3000,
+                        springLength: 95
+                    }}
+                }}
+            }};
+            var network = new vis.Network(container, data, options);
+        </script>
+    </body>
+    </html>
+    """
+    return html_content
 
 # Sidebar Navigation
 st.sidebar.title("🛡️ VigilDoc Portal")
@@ -149,11 +185,8 @@ if page == "🌐 API Topology Map":
             ["All", "Authentication", "Core Endpoints", "Webhooks", "Data Schemas"]
         )
 
-        html_file = render_pyvis_graph(graph_data, category_filter)
-        with open(html_file, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-
-        components.html(html_content, height=580, scrolling=True)
+        html_content = render_standalone_graph(graph_data, category_filter)
+        components.html(html_content, height=560, scrolling=False)
 
 # Page 2: Interactive Docs Portal
 elif page == "📚 Interactive Docs Portal":
