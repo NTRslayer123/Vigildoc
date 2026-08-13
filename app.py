@@ -20,18 +20,26 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for Modern Dark/Glassmorphic Aesthetics
+# Load and inject global styles.css design system
+BASE_DIR = os.path.dirname(__file__)
+styles_file = os.path.join(BASE_DIR, 'styles.css')
+if os.path.exists(styles_file):
+    with open(styles_file, 'r', encoding='utf-8') as f:
+        css_content = f.read()
+    st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
+
+# Custom Streamlit component overrides
 st.markdown("""
 <style>
-    /* Dark Theme Customization */
     .stApp {
-        background-color: #0F172A;
+        background-color: #080C14;
         color: #F8FAFC;
     }
     .main-header {
         font-size: 2.2rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #6366F1 0%, #A855F7 50%, #EC4899 100%);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 50%, #06B6D4 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.5rem;
@@ -40,28 +48,6 @@ st.markdown("""
         color: #94A3B8;
         font-size: 1.05rem;
         margin-bottom: 1.5rem;
-    }
-    .badge-card {
-        background: rgba(30, 41, 59, 0.7);
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        height: 45px;
-        white-space: pre-wrap;
-        background-color: #1E293B;
-        border-radius: 8px 8px 0px 0px;
-        color: #94A3B8;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #6366F1 !important;
-        color: #FFFFFF !important;
     }
 </style>
 """, unsafe_allow_html=True)
