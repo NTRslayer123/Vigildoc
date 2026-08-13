@@ -14,40 +14,139 @@ import requests
 
 # Page Config
 st.set_page_config(
-    page_title="VigilDoc — Live API Documentation Portal",
+    page_title="VigilDoc — Live Technical & API Documentation Portal",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Load and inject global styles.css design system
-BASE_DIR = os.path.dirname(__file__)
-styles_file = os.path.join(BASE_DIR, 'styles.css')
-if os.path.exists(styles_file):
-    with open(styles_file, 'r', encoding='utf-8') as f:
-        css_content = f.read()
-    st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
-
-# Custom Streamlit component overrides
+# Comprehensive Streamlit Design System Overrides (Linear + Stripe + Vercel)
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    /* Global App Background */
     .stApp {
-        background-color: #080C14;
-        color: #F8FAFC;
+        background-color: #080C14 !important;
+        color: #F8FAFC !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        background-image: 
+            radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
+            radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+            radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.06) 0%, transparent 60%) !important;
+        background-attachment: fixed !important;
     }
+
+    /* Sidebar Glassmorphism */
+    [data-testid="stSidebar"] {
+        background-color: rgba(15, 23, 42, 0.85) !important;
+        backdrop-filter: blur(20px) saturate(190%) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-testid="stSidebar"] * {
+        color: #F8FAFC !important;
+    }
+
+    /* Headers */
     .main-header {
-        font-size: 2.2rem;
+        font-size: 2.3rem;
         font-weight: 800;
         letter-spacing: -0.02em;
         background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 50%, #06B6D4 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
     }
     .sub-header {
         color: #94A3B8;
         font-size: 1.05rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.8rem;
+    }
+
+    /* Metric Cards */
+    [data-testid="stMetricValue"] {
+        font-family: 'Fira Code', monospace !important;
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        background: linear-gradient(135deg, #6366F1 0%, #06B6D4 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #94A3B8 !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+    }
+    div[data-testid="stMetric"] {
+        background: rgba(15, 23, 42, 0.75) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 16px !important;
+        padding: 1.1rem 1.4rem !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+        transition: all 300ms ease !important;
+    }
+    div[data-testid="stMetric"]:hover {
+        transform: translateY(-3px) !important;
+        border-color: rgba(99, 102, 241, 0.5) !important;
+        box-shadow: 0 16px 40px -10px rgba(99, 102, 241, 0.3) !important;
+    }
+
+    /* Selectbox & Inputs */
+    .stSelectbox div[data-baseweb="select"] > div, .stTextInput input {
+        background-color: rgba(15, 23, 42, 0.8) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        color: #F8FAFC !important;
+    }
+    .stSelectbox div[data-baseweb="select"]:hover > div, .stTextInput input:focus {
+        border-color: #6366F1 !important;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3) !important;
+    }
+
+    /* Buttons */
+    .stButton button {
+        background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%) !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        padding: 0.65rem 1.5rem !important;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35) !important;
+        transition: all 250ms ease !important;
+    }
+    .stButton button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5) !important;
+    }
+
+    /* Pulsing Badge Indicator */
+    .pulse-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(16, 185, 129, 0.12);
+        color: #10B981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 0.35rem 0.85rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+    }
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #10B981;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        animation: pulse-ring 2s infinite;
+    }
+    @keyframes pulse-ring {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -92,15 +191,15 @@ def render_standalone_graph(graph_data, selected_category=None):
             html, body {{
                 margin: 0;
                 padding: 0;
-                background-color: #0F172A;
+                background-color: #040813;
                 font-family: system-ui, -apple-system, sans-serif;
             }}
             #mynetwork {{
                 width: 100%;
                 height: 540px;
-                background-color: #0F172A;
-                border: 1px solid rgba(99, 102, 241, 0.3);
-                border-radius: 12px;
+                background-color: #040813;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 14px;
             }}
         </style>
     </head>
@@ -157,7 +256,12 @@ def render_standalone_graph(graph_data, selected_category=None):
     return html_content
 
 # Sidebar Navigation
-st.sidebar.title("VigilDoc Portal")
+st.sidebar.markdown("""
+<div style="display: flex; align-items: center; gap: 0.6rem; font-size: 1.3rem; font-weight: 800; color: #F8FAFC;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+  VigilDoc Portal
+</div>
+""", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
 page = st.sidebar.radio(
@@ -166,7 +270,11 @@ page = st.sidebar.radio(
 )
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### Badge Status")
+st.sidebar.markdown("""
+<div style="font-size: 0.88rem; font-weight: 700; color: #94A3B8; margin-bottom: 0.75rem;">
+  🏅 Weekly Badge Verification
+</div>
+""", unsafe_allow_html=True)
 st.sidebar.markdown("✅ **The Collector** (Ingestion)")
 st.sidebar.markdown("✅ **The Tech Writer** (LLM Docs)")
 st.sidebar.markdown("✅ **The Publisher** (Graph Visualizer)")
@@ -175,19 +283,26 @@ st.sidebar.markdown("✅ **The Assistant** (RAG Copilot)")
 # Page 1: API Topology Map
 if page == "API Topology Map":
     st.markdown('<div class="main-header">Interactive API Topology & Schema Map</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">Visualizing endpoints, schema dependencies, and dense vector similarity linkages</div>', unsafe_allow_html=True)
+    st.markdown('''
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div class="sub-header" style="margin-bottom: 0;">Visualizing endpoints, schema dependencies, and dense vector similarity linkages</div>
+        <div class="pulse-indicator"><span class="pulse-dot"></span> LIVE TOPOLOGY & VECTOR INDEX</div>
+    </div>
+    ''', unsafe_allow_html=True)
 
     graph_data = load_graph()
     if not graph_data:
         st.warning("⚠️ No graph.json found. Run capture.py -> classify.py -> link.py -> build_graph.py first.")
     else:
         col1, col2, col3 = st.columns(3)
-        col1.metric("Total Nodes", graph_data['total_nodes'])
-        col2.metric("Total Network Edges", graph_data['total_edges'])
+        col1.metric("Total Endpoints & Nodes", graph_data['total_nodes'])
+        col2.metric("Total Schema Edges", graph_data['total_edges'])
         col3.metric("Auto Vector Links", len([e for e in graph_data['edges'] if e.get('label') == 'vector_linked']))
 
+        st.markdown("<br>", unsafe_allow_html=True)
+
         category_filter = st.selectbox(
-            "Filter Network Topology by Category:",
+            "Filter Network Topology by Domain Category:",
             ["All", "Authentication", "Core Endpoints", "Webhooks", "Data Schemas"]
         )
 
@@ -226,7 +341,7 @@ elif page == "Interactive Docs Portal":
 
 # Page 3: RAG Developer Copilot
 elif page == "RAG Developer Copilot":
-    st.markdown('<div class="main-header">RAG Developer Copilot</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">RAG Developer Copilot Assistant</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Ask complex integration workflow questions and receive copy-pasteable code guides</div>', unsafe_allow_html=True)
 
     user_query = st.text_input(
